@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Vuex from 'vuex'
+import store from '../store'
+import { sync } from 'vuex-router-sync'
 import Login from '@/components/Login'
 import Home from '@/components/frame/Home'
 
 Vue.use(Router)
+Vue.use(Vuex)
 
 const router = new Router({
   routes: [{
@@ -20,10 +24,12 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-  let userInfo = await localStorage.getItem('authUser') || '{"status": false}'
-  userInfo = JSON.parse(userInfo)
+  if (store.state.authUser.status === false) {
+    store.commit('SET_USER', JSON.parse(localStorage.getItem('authUser')))
+  }
+
   if (to.fullPath !== '/') {
-    if (userInfo.status) {
+    if (store.state.authUser.status) {
       next()
     } else {
       next({
@@ -31,8 +37,7 @@ router.beforeEach(async (to, from, next) => {
       })
     }
   } else {
-    console.log(userInfo.status)
-    if (userInfo.status) {
+    if (store.state.authUser.status) {
       next({
         path: '/home'
       })
@@ -41,5 +46,9 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 })
+
+const unsync = sync(store, router)
+
+unsync()
 
 export default router

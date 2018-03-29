@@ -1,8 +1,11 @@
 <template>
   <div>
-    <edit-article v-if="false"></edit-article>
-    <manage-articles v-if="false"></manage-articles>
-    <div v-if="true">
+    <edit-article v-show='$store.state.menuIndex == "addArticle"'></edit-article>
+    <manage-articles v-show='$store.state.menuIndex == "articlesList"'></manage-articles>
+    <comments-list v-show='$store.state.menuIndex == "commentsList"'></comments-list>
+    <subscribe-list v-show='$store.state.menuIndex == "subscribeList"'></subscribe-list>
+
+    <div v-show='$store.state.menuIndex == "dashboard"'>
       <div class="level">
         <div class="level-item has-text-centered">
           <div>
@@ -51,11 +54,15 @@
 <script>
 import EditArticle from '../articles/EditArticle'
 import ManageArticles from '../articles/ManageArticles'
+import CommentsList from '../comments/CommentsList'
+import SubscribeList from '../subscribe/SubscribeList'
 
 export default {
   components: {
     EditArticle,
-    ManageArticles
+    ManageArticles,
+    CommentsList,
+    SubscribeList
   }
 }
 </script>

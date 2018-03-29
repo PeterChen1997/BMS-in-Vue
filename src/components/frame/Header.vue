@@ -11,7 +11,7 @@
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control">
-            <button class="button is-info is-rounded">
+            <button class="button is-info is-rounded" @click="logOut">
               <span class="icon">
                 <i class="fa fa-sign-out"></i>
               </span>
@@ -26,8 +26,14 @@
 </template>
 
 <script>
-export default {
+import { mapMutations } from 'vuex'
 
+export default {
+  methods: {
+    ...mapMutations({
+      logOut: 'SIGN_OUT' // 将 `this.add()` 映射为 `this.$store.commit('increment')`
+    })
+  }
 }
 </script>
 

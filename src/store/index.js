@@ -2,14 +2,19 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import config from '../config'
+import router from '../router'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    authUser: { state: false }
+    authUser: { status: false },
+    menuIndex: 'dashboard'
   },
   mutations: {
+    SET_MENU: function (state, menuIndex) {
+      state.menuIndex = menuIndex
+    },
     SET_USER: function (state, user) {
       localStorage.setItem('authUser', JSON.stringify(user))
       state.authUser = user
@@ -17,6 +22,7 @@ const store = new Vuex.Store({
     SIGN_OUT: function (state) {
       localStorage.setItem('authUser', JSON.stringify({ status: false }))
       state.authUser.status = false
+      router.push({ path: '/' })
     }
   },
   actions: {

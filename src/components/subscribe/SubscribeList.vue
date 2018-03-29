@@ -1,6 +1,6 @@
 <template>
   <div>
-    ManageArticles
+    Subscribe
   </div>
 </template>
 
