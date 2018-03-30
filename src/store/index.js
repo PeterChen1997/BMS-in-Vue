@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     authUser: { status: false },
-    menuIndex: 'dashboard'
+    menuIndex: 'dashboard',
+    articlesList: []
   },
   mutations: {
     SET_MENU: function (state, menuIndex) {
@@ -18,6 +19,9 @@ const store = new Vuex.Store({
     SET_USER: function (state, user) {
       localStorage.setItem('authUser', JSON.stringify(user))
       state.authUser = user
+    },
+    SET_ARTICLES: function (state, articlesList) {
+      state.articlesList = articlesList
     },
     SIGN_OUT: function (state) {
       localStorage.setItem('authUser', JSON.stringify({ status: false }))
@@ -38,9 +42,13 @@ const store = new Vuex.Store({
       }
     },
 
-    async logout ({ commit }) {
-      await axios.post('/api/logout')
+    logout ({ commit }) {
       commit('SET_USER', null)
+    },
+
+    async getArticles ({ commit }, index) {
+      const articlesList = await axios.get(`${config.url}/articles/${index}`)
+      commit('SET_ARTICLES', articlesList.data)
     }
   }
 })
