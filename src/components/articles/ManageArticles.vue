@@ -19,8 +19,8 @@
           <td>{{ item.topic  }}</td>
           <td>{{ item.view  }}</td>
           <td>
-            <button :data-id="item.id" class="button is-link is-rounded">修改</button>
-            <button :data-id="item.id" class="button is-danger is-rounded">删除</button>
+            <button :data-id="item.id" class="button is-link is-rounded" @click="handleEdit">修改</button>
+            <button :data-id="item.id" class="button is-danger is-rounded" @click="handleDelete">删除</button>
           </td>
         </tr>
       </tbody>
@@ -41,6 +41,20 @@ export default {
   components: {
     MyPagination,
     MyBreadcrumb
+  },
+  methods: {
+    handleDelete(e) {
+      let id = e.target.dataset.id
+      this.$store.commit('SET_DELETE_TYPE', {
+         id,
+         type:'Article'
+      })
+    },
+    handleEdit(e) {
+      let id = e.target.dataset.id
+      console.log(id)
+      this.$store.commit('EDIT_ARTICLE', id)
+    }
   }
 }
 </script>

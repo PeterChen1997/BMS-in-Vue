@@ -2,6 +2,9 @@
 <div>
   <my-header></my-header>
 
+  <my-delete-modal v-if="$store.state.deleteModalShow"></my-delete-modal>
+  <my-edit-modal v-if="$store.state.editModalShow"></my-edit-modal>
+
   <section class="hero is-medium is-primary is-bold">
     <div class="hero-body">
       <div class="container">
@@ -33,13 +36,17 @@ import MyHeader from "./Header";
 import MyFooter from "./Footer";
 import MySidebar from "./SideBar";
 import MyContent from "./Content";
+import MyDeleteModal from '../tool/DeleteModal'
+import MyEditModal from '../tool/EditModal'
 
 export default {
   components: {
     MyHeader,
     MyFooter,
     MySidebar,
-    MyContent
+    MyContent,
+    MyDeleteModal,
+    MyEditModal
   }
 };
 </script>
