@@ -11,7 +11,6 @@
     </p>
     <ul class="menu-list">
       <li><a :class="$store.state.menuIndex == 'articlesList' ? 'is-active' : ''" data-index="articlesList">文章列表</a></li>
-      <li><a :class="$store.state.menuIndex == 'addArticle' ? 'is-active' : ''" data-index="addArticle">新增文章</a></li>
     </ul>
     <p class="menu-label">
       留言管理

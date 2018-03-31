@@ -17,7 +17,8 @@ const store = new Vuex.Store({
     isDeletingId: '',
     editModalShow: false,
     isEditingId: '',
-    articlesPaginationCount: 1
+    articlesPaginationCount: 1,
+    isSearching: false
   },
   mutations: {
     SET_MENU: function (state, menuIndex) {
@@ -29,7 +30,7 @@ const store = new Vuex.Store({
     },
     SET_ARTICLES: function (state, articlesList) {
       state.articlesList = articlesList
-      state.articlesPaginationCount = Math.ceil(articlesList.count / 5)
+      state.articlesPaginationCount = Math.ceil(articlesList.count / 5) || 1
     },
     SIGN_OUT: function (state) {
       localStorage.setItem('authUser', JSON.stringify({ status: false }))
@@ -49,8 +50,16 @@ const store = new Vuex.Store({
     EDIT_ARTICLE: function (state, id) {
       state.editModalShow = true
       state.isEditingId = id
-      let resultArray = state.articlesList.rows.filter(item => item.id === id)
-      state.isEditingArticle = resultArray[0]
+      if (id !== '') {
+        let resultArray = state.articlesList.rows.filter(item => item.id === id)
+        state.isEditingArticle = resultArray[0]
+      } else {
+        state.isEditingArticle = {
+          title: '',
+          content: '',
+          topic: ''
+        }
+      }
     },
     CLOSE_EDIT_MODAL: function (state) {
       state.editModalShow = false
@@ -59,6 +68,12 @@ const store = new Vuex.Store({
     },
     SET_ARTICLES_PAGINATION_INDEX: function (state, id) {
       state.articlesListIndex = id
+    },
+    SET_SEARCHING_STATE: function (state, status) {
+      state.isSearching = status
+    },
+    SET_SEARCH_INFO: function (state, info) {
+      state.searchInfo = info
     }
   },
   actions: {
@@ -92,7 +107,7 @@ const store = new Vuex.Store({
         if (state.articlesList.count - 1 === (state.articlesPaginationCount - 1) * 5) {
           state.articlesListIndex--
         }
-        dispatch('getArticles')
+        dispatch('reloadArticlesList')
       } else {
         // TODO:加上删除失败的提示
         commit('CLOSE_DELETE_MODAL')
@@ -105,13 +120,52 @@ const store = new Vuex.Store({
       await dispatch(`delete${type}`, id)
     },
 
-    async editConfirm ({ dispatch, state }, content) {
+    async editConfirm ({ dispatch, state, commit }, data) {
+      if (state.isEditingId !== '') {
+        let result = await axios.patch(`${config.url}/articles/${state.isEditingId}`, data)
+        if (result.data === 'success') {
+          commit('CLOSE_EDIT_MODAL')
+          await dispatch('reloadArticlesList')
+        } else {
+          // TODO:完成失败提示
+        }
+      } else {
+        // 新增文章
+        let result = await axios.post(`${config.url}/articles`, data)
+        if (result.status === 200) {
+          commit('CLOSE_EDIT_MODAL')
+          await dispatch('reloadArticlesList')
+        } else {
+          // TODO:完成失败提示
+        }
+      }
     },
 
-    async setPaginationIndex ({ dispatch, commit }, id) {
-      commit('SET_ARTICLES_PAGINATION_INDEX', id)
+    async addNewArticle ({ commit }) {
+      commit('EDIT_ARTICLE', '')
+    },
 
-      await dispatch('getArticles')
+    async setPaginationIndex ({ dispatch, commit, state }, id) {
+      commit('SET_ARTICLES_PAGINATION_INDEX', id)
+      await dispatch('reloadArticlesList')
+    },
+
+    async reloadArticlesList ({ dispatch, state }) {
+      if (state.isSearching) {
+        await dispatch('searchArticles')
+      } else {
+        await dispatch('getArticles')
+      }
+    },
+
+    async searchArticles ({ commit, state }) {
+      let articles = await axios.get(`${config.url}/articles/search/${state.searchInfo}/${state.articlesListIndex}`)
+      if (state.articlesListIndex) {
+        commit('SET_ARTICLES', articles.data)
+      } else {
+        commit('SET_ARTICLES', {})
+        commit('SET_ARTICLES_PAGINATION_INDEX', 1)
+      }
     }
   }
 })

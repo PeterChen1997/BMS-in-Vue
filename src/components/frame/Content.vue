@@ -1,6 +1,5 @@
 <template>
   <div>
-    <edit-article v-show='$store.state.menuIndex == "addArticle"'></edit-article>
     <manage-articles v-show='$store.state.menuIndex == "articlesList"'></manage-articles>
     <comments-list v-show='$store.state.menuIndex == "commentsList"'></comments-list>
     <subscribe-list v-show='$store.state.menuIndex == "subscribeList"'></subscribe-list>
@@ -52,14 +51,12 @@
 </template>
 
 <script>
-import EditArticle from '../articles/EditArticle'
 import ManageArticles from '../articles/ManageArticles'
 import CommentsList from '../comments/CommentsList'
 import SubscribeList from '../subscribe/SubscribeList'
 
 export default {
   components: {
-    EditArticle,
     ManageArticles,
     CommentsList,
     SubscribeList
