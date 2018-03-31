@@ -35,9 +35,13 @@ const store = new Vuex.Store({
       state.menuIndex = menuIndex
     },
     SET_USER: function (state, user) {
-      localStorage.setItem('authUser', JSON.stringify(user))
-      state.authUser = user
-      state.isLogin = user.status
+      if (user) {
+        localStorage.setItem('authUser', JSON.stringify(user))
+        state.authUser = user
+        state.isLogin = true
+      } else {
+        state.isLogin = false
+      }
     },
     SET_ARTICLES: function (state, articlesList) {
       state.articlesList = articlesList
