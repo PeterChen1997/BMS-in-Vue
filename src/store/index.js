@@ -8,7 +8,14 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    authUser: { status: false },
+    authUser: {},
+    isLogin: false,
+    totalViewCount: 'Unknow',
+    totalSubscribeCount: 'Unknow',
+    totalCommentsCount: 'Unknow',
+    totalLikesCount: 'Unknow',
+    newCommentsCount: 'Unknow',
+    newSubscribeCount: 'Unknow',
     menuIndex: 'dashboard',
     articlesListIndex: 1,
     articlesList: [],
@@ -21,12 +28,16 @@ const store = new Vuex.Store({
     isSearching: false
   },
   mutations: {
+    SET_LOGIN_STATE: function (state) {
+      state.isLogin = true
+    },
     SET_MENU: function (state, menuIndex) {
       state.menuIndex = menuIndex
     },
     SET_USER: function (state, user) {
       localStorage.setItem('authUser', JSON.stringify(user))
       state.authUser = user
+      state.isLogin = user.status
     },
     SET_ARTICLES: function (state, articlesList) {
       state.articlesList = articlesList
@@ -35,6 +46,7 @@ const store = new Vuex.Store({
     SIGN_OUT: function (state) {
       localStorage.setItem('authUser', JSON.stringify({ status: false }))
       state.authUser.status = false
+      state.isLogin = false
       router.push({ path: '/' })
     },
     SET_DELETE_TYPE: function (state, payload) {
@@ -80,17 +92,16 @@ const store = new Vuex.Store({
     async login ({ commit }, { id, password }) {
       try {
         const { data } = await axios.post(`${config.url}/users`, { id, password })
-        commit('SET_USER', data)
+        if (data.status) {
+          commit('SET_USER', data)
+          commit('SET_LOGIN_STATE', true)
+        }
       } catch (error) {
         if (error.response && error.response.status === 401) {
           throw new Error('Bad credentials')
         }
         throw error
       }
-    },
-
-    logout ({ commit }) {
-      commit('SET_USER', null)
     },
 
     async getArticles ({ commit, state }) {

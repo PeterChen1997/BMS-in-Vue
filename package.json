@@ -2,6 +2,7 @@
   "name": "blog-ms",
   "version": "1.0.0",
   "description": "A Vue.js project",
+  "homepage": "https://admin.peterchen.club",
   "author": "PeterChen <747853229@qq.com>",
   "private": true,
   "scripts": {

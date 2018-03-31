@@ -9,25 +9,25 @@
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">总浏览量</p>
-            <p class="title">3,456</p>
+            <p class="title">{{ $store.state.totalViewCount }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">订阅数量</p>
-            <p class="title">1</p>
+            <p class="title">{{ $store.state.totalSubscribeCount }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">留言数</p>
-            <p class="title">100</p>
+            <p class="title">{{ $store.state.totalCommentsCount }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">点赞数</p>
-            <p class="title">789</p>
+            <p class="title">{{ $store.state.totalLikesCount }}</p>
           </div>
         </div>
       </div>
@@ -36,13 +36,13 @@
         <div class="level-item has-text-centered ">
           <div>
             <p class="heading is-size-4">新增留言</p>
-            <p class="title is-size-4">20</p>
+            <p class="title is-size-4">{{ $store.state.newCommentsCount }}</p>
           </div>
         </div>
         <div class="level-item has-text-centered">
           <div>
             <p class="heading is-size-4">新增订阅</p>
-            <p class="title is-size-4">13</p>
+            <p class="title is-size-4">{{ $store.state.newSubscribeCount }}</p>
           </div>
         </div>
       </div>

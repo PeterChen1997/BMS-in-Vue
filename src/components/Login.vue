@@ -27,12 +27,11 @@ export default {
   },
   computed: {
     getLoginState () {
-      return this.$store.state.authUser.status
+      return this.$store.state.isLogin
     }
   },
   watch: {
     getLoginState: function (newState) {
-      console.log('nice')
       if (newState === true) {
         this.$router.push({ path: '/home' })
       }

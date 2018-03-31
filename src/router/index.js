@@ -24,12 +24,12 @@ const router = new Router({
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (store.state.authUser.status === false) {
+  if (store.state.isLogin === false) {
     store.commit('SET_USER', JSON.parse(localStorage.getItem('authUser')))
   }
 
   if (to.fullPath !== '/') {
-    if (store.state.authUser.status) {
+    if (store.state.isLogin) {
       next()
     } else {
       next({
@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
       })
     }
   } else {
-    if (store.state.authUser.status) {
+    if (store.state.isLogin) {
       next({
         path: '/home'
       })
