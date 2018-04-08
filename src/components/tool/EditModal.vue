@@ -28,6 +28,14 @@
           </div>
 
           <div class="field">
+            <label class="label">描述</label>
+            <p class="help is-info">用于显示在首页</p>
+            <div class="control">
+              <input class="input" type="text" required="required" placeholder="请输入文章描述" :value="$store.state.isEditingArticle.desc" @input="handleInput" data-type="desc">
+            </div>
+          </div>
+
+          <div class="field">
             <label class="label">文章内容</label>
             <p class="help is-info">请使用Markdown格式</p>
             <div class="control">

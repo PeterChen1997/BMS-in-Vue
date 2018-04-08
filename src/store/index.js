@@ -109,7 +109,7 @@ const store = new Vuex.Store({
     },
 
     async getArticles ({ commit, state }) {
-      const articlesList = await axios.get(`${config.url}/articles/${state.articlesListIndex}`)
+      const articlesList = await axios.get(`${config.url}/articles/page/${state.articlesListIndex}`)
       commit('SET_ARTICLES', articlesList.data)
     },
 
